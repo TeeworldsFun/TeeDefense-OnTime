@@ -16,7 +16,7 @@ int CEcon::NewClientCallback(int ClientID, void *pUser)
 	pThis->Console()->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "econ", aBuf);
 
 	pThis->m_aClients[ClientID].m_State = CClient::STATE_CONNECTED;
-	pThis->m_aClients[ClientID].m_TimeConnected = time_get();
+	pThis->m_aClients[ClientID].m_TimeConnected = time_get_tws();
 	pThis->m_aClients[ClientID].m_AuthTries = 0;
 
 	pThis->m_NetConsole.Send(ClientID, "Enter password:");
@@ -155,7 +155,7 @@ void CEcon::Update()
 	for(int i = 0; i < NET_MAX_CONSOLE_CLIENTS; ++i)
 	{
 		if(m_aClients[i].m_State == CClient::STATE_CONNECTED &&
-			time_get() > m_aClients[i].m_TimeConnected + g_Config.m_EcAuthTimeout * time_freq())
+			time_get_tws() > m_aClients[i].m_TimeConnected + g_Config.m_EcAuthTimeout * time_freq())
 			m_NetConsole.Drop(i, "authentication timeout");
 	}
 }

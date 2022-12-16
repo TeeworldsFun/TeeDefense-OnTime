@@ -58,7 +58,7 @@ public:
 
 	CEngine(const char *pAppname)
 	{
-		srand(time_get());
+		srand(time_get_tws());
 		dbg_logger_stdout();
 		dbg_logger_debugger();
 

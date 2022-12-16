@@ -43,7 +43,7 @@ bool CNetServer::Open(NETADDR BindAddr, CNetBan *pNetBan, int MaxClients, int Ma
 	m_MaxClientsPerIP = MaxClientsPerIP;
 
 	m_NumConAttempts = 0;
-	m_TimeNumConAttempts = time_get();
+	m_TimeNumConAttempts = time_get_tws();
 
 	m_VConnHighLoad = false;
 	m_VConnNum = 0;
@@ -100,7 +100,7 @@ int CNetServer::Drop(int ClientID, const char *pReason)
 
 int CNetServer::Update()
 {
-	int64 Now = time_get();
+	int64 Now = time_get_tws();
 	for(int i = 0; i < MaxClients(); i++)
 	{
 		m_aSlots[i].m_Connection.Update();
@@ -260,7 +260,7 @@ void CNetServer::OnPreConnMsg(NETADDR &Addr, CNetPacketConstruct &Packet)
 	//TODO: remove
 	if (g_Config.m_Debug)
 	{
-		int64 Now = time_get();
+		int64 Now = time_get_tws();
 
 		if (Now - m_TimeNumConAttempts > time_freq())
 			// reset
@@ -282,7 +282,7 @@ void CNetServer::OnPreConnMsg(NETADDR &Addr, CNetPacketConstruct &Packet)
 		if (g_Config.m_SvVanillaAntiSpoof && g_Config.m_Password[0] == '\0')
 		{
 			// detect flooding
-			int64 Now = time_get();
+			int64 Now = time_get_tws();
 			if(Now <= m_VConnFirst + time_freq())
 			{
 				m_VConnNum++;

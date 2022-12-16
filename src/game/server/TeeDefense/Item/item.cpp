@@ -2,111 +2,108 @@
 
 #include "item.h"
 
+#include <fstream>
+#include <string>
+#include <sstream>
+
+// Init Item
+CItem::CItem()
+{
+    // Init all options.(what?)
+    str_copy(m_Name, "", sizeof(m_Name));
+    m_Type = -1;
+}
 CItemSys::CItemSys(CGameContext *pGameServer)
 {
     m_pGameServer = pGameServer;
-    thread(LoadItems);
+    dbg_msg("Test", "asdhgwkhdagsd");
+    LoadJson("items.json");
+	LoadItems();
 }
 
-/*const json_value *CItemSys::LoadJson(const char Index[64])
+void CItemSys::LoadJson(const std::string& FileName)
 {
-    char aFileBuf[512];
-	str_format(aFileBuf, sizeof(aFileBuf), "items.json");
-	const IOHANDLE File = Storage()->OpenFile(aFileBuf, IOFLAG_READ, IStorage::TYPE_ALL);
-    
-	if(!File)
-	{
-		GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "Item Loader", "Probably deleted or error when the file is invalid.");
-		return;
-	}
-	
-	const int FileSize = (int)io_length(File);
-	char* pFileData = (char*)malloc(FileSize);
-	io_read(File, pFileData, FileSize);
-	io_close(File);
-
-	// parse json data
-	json_settings JsonSettings;
-	mem_zero(&JsonSettings, sizeof(JsonSettings));
-	char aError[256];
-	json_value* pJsonData = json_parse_ex(&JsonSettings, pFileData, FileSize, aError);
-	free(pFileData);
-    if(aError)
-        dbg_msg("LoadJson - Error", "Error: %s", aError);
-
-	if(pJsonData == nullptr)
-	{
-		GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "LoadJson - THE FUCK!", "WHERE IS MY JSON'S DATA????");
-		return;
-	}
-
-    const json_value &rStart = (*pJsonData)[Index];
-    return &rStart;
-}*/
+    using nlohmann::json;
+    std::ifstream i(FileName);
+    if(i.is_open())
+    {
+        i >> m_Json;
+        i.close();
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << "could not open file '" << FileName << "'!";
+        GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_DEBUG, "json", ss.str().c_str());
+    }
+}
 
 void CItemSys::LoadItems()
 {
-    char aFileBuf[512];
-	str_format(aFileBuf, sizeof(aFileBuf), "items.json");
-	const IOHANDLE File = Storage()->OpenFile(aFileBuf, IOFLAG_READ, IStorage::TYPE_ALL);
-    
-	if(!File)
-	{
-		GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "Item Loader", "Probably deleted or error when the file is invalid.");
-		return;
-	}
-	
-	const int FileSize = (int)io_length(File);
-	char* pFileData = (char*)malloc(FileSize);
-	io_read(File, pFileData, FileSize);
-	io_close(File);
+	using nlohmann::json;
+    json j = m_Json["Items"];
 
-	// parse json data
-	json_settings JsonSettings;
-	mem_zero(&JsonSettings, sizeof(JsonSettings));
-	char aError[256];
-	json_value* pJsonData = json_parse_ex(&JsonSettings, pFileData, FileSize, aError);
-	free(pFileData);
-    if(aError)
-        dbg_msg("LoadJson - Error", "Error: %s", aError);
 
-	if(pJsonData == nullptr)
+    if(j.is_array())
 	{
-		GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "LoadJson - THE FUCK!", "WHERE IS MY JSON'S DATA????");
-		return;
-	}
-    const json_value& rJson = (*pJsonData)["items"];
-    if(rJson.type == json_array)
-	{
-		for(unsigned i = 0; i < rJson.u.array.length; ++i)
+        dbg_msg("Test", "Type = %s, size = %d", j.type_name(), j.size());
+		for(unsigned i = 0; i < j.size(); ++i)
 		{
-            switch (rJson[i]["Type"].u.integer)
+            json Json = j[i];
+            CItem TmpItem;
+			dbg_msg("Test", "%d: %d", i, Json.value("Type", 0));
+            
+            //str_copy(TmpItem->m_Name, Json.value("Name", "SB").c_str(), sizeof(TmpItem->m_Name));
+            TmpItem.m_Type = Json.value("Type", 0);
+            
+            if(!Json["Mine"].empty())
             {
-            case TYPE_MATERIAL:
-                
-                break;
-            
-            case TYPE_WEAPON:
-                /* code */
-                break;
-            
-            case TYPE_TOOL:
-                /* code */
-                break;
-            
-            case TYPE_TURRET:
-                /* code */
-                break;
-            
-            case TYPE_USE:
-                /* code */
-                break;
-            
-            default:
-                break;
+                json From = Json["Mine"];
+                for(int j = 0; j < From.size(); j++)
+                {
+                    json TempJson = From[j];
+                    dbg_msg("Test", "%d Type:: %s %s", From.size(), TempJson.type_name(), TempJson.dump().c_str());
+                    //TmpItem.m_Mine.add()
+                }
+            }
+            else if(!Json["Method"].empty())
+            {
+                json From = Json["Method"];
+            }
+            else if(!Json["MobID"].empty())
+            {
+                json From = Json["MobID"];
             }
 
-            
+            switch(TmpItem.m_Type)
+            {
+
+                // Material
+                case TYPE_MATERIAL:
+
+                break;
+
+                // Weapon
+                case TYPE_WEAPON:
+                
+                break;
+
+                // Tool
+                case TYPE_TOOL:
+                
+                break;
+
+                // Turret
+                case TYPE_TURRET:
+                
+                break;
+                
+                // Use
+                case TYPE_USE:
+                
+                break;
+            }
+            m_Items.push_back(&TmpItem);
         }
     }
 }

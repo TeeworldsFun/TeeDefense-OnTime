@@ -437,7 +437,7 @@ __extension__ typedef long long int64;
 typedef long long int64;
 #endif
 /*
-	Function: time_get
+	Function: time_get_tws
 		Fetches a sample from a high resolution timer.
 
 	Returns:
@@ -446,7 +446,7 @@ typedef long long int64;
 	Remarks:
 		To know how fast the timer is ticking, see <time_freq>.
 */
-int64 time_get();
+int64 time_get_tws();
 
 /*
 	Function: time_freq

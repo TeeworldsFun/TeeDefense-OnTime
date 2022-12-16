@@ -14,6 +14,8 @@
 #include <teeuniverses/system/string.h>
 #include <teeuniverses/tl/nlohmann_json.h>
 
+#include <game/server/TeeDefense/Item/item.h>
+
 #include <mutex>
 #include <thread>
 
@@ -41,6 +43,10 @@ void CGameContext::Construct(int Resetting)
 
 	if(Resetting==NO_RESET)
 		m_pVoteOptionHeap = new CHeap();
+
+	m_ItemSys = new CItemSys(this);
+	if(m_ItemSys)
+		dbg_msg("Test", "sadajhw");
 }
 
 CGameContext::CGameContext(int Resetting)
@@ -413,7 +419,7 @@ void CGameContext::StartVote(const char *pDesc, const char *pCommand, const char
 	}
 
 	// start vote
-	m_VoteCloseTime = time_get() + time_freq()*25;
+	m_VoteCloseTime = time_get_tws() + time_freq()*25;
 	str_copy(m_aVoteDescription, pDesc, sizeof(m_aVoteDescription));
 	str_copy(m_aVoteCommand, pCommand, sizeof(m_aVoteCommand));
 	str_copy(m_aVoteReason, pReason, sizeof(m_aVoteReason));
@@ -433,7 +439,7 @@ void CGameContext::SendVoteSet(int ClientID)
 	CNetMsg_Sv_VoteSet Msg;
 	if(m_VoteCloseTime)
 	{
-		Msg.m_Timeout = (m_VoteCloseTime-time_get())/time_freq();
+		Msg.m_Timeout = (m_VoteCloseTime-time_get_tws())/time_freq();
 		Msg.m_pDescription = m_aVoteDescription;
 		Msg.m_pReason = m_aVoteReason;
 	}
@@ -589,7 +595,7 @@ void CGameContext::OnTick()
 				if(m_apPlayers[m_VoteCreator])
 					m_apPlayers[m_VoteCreator]->m_LastVoteCall = 0;
 			}
-			else if(m_VoteEnforce == VOTE_ENFORCE_NO || time_get() > m_VoteCloseTime)
+			else if(m_VoteEnforce == VOTE_ENFORCE_NO || time_get_tws() > m_VoteCloseTime)
 			{
 				EndVote();
 				SendChatTarget(-1, "Vote failed");

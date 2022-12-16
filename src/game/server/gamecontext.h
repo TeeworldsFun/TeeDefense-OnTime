@@ -26,6 +26,7 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h>
 #endif
 
+class CItemSys;
 /*
 	Tick
 		Game Context (CGameContext::tick)
@@ -110,6 +111,7 @@ public:
 
 	CEventHandler m_Events;
 	CPlayer *m_apPlayers[MAX_CLIENTS];
+	CItemSys *m_ItemSys;
 
 	CGameController *m_pController;
 	CGameWorld m_World;

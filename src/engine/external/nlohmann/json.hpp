@@ -5700,7 +5700,7 @@ class basic_json
                     return false;
 
                 case value_t::string:
-                    return *lhs.m_value.string < *rhs.m_value.string;
+                    return (*lhs.m_value.string) < (*rhs.m_value.string);
 
                 case value_t::boolean:
                     return lhs.m_value.boolean < rhs.m_value.boolean;

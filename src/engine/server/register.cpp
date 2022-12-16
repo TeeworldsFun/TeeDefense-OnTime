@@ -28,7 +28,7 @@ CRegister::CRegister()
 void CRegister::RegisterNewState(int State)
 {
 	m_RegisterState = State;
-	m_RegisterStateStart = time_get();
+	m_RegisterStateStart = time_get_tws();
 }
 
 void CRegister::RegisterSendFwcheckresponse(NETADDR *pAddr)
@@ -99,7 +99,7 @@ void CRegister::Init(CNetServer *pNetServer, IEngineMasterServer *pMasterServer,
 
 void CRegister::RegisterUpdate(int Nettype)
 {
-	int64 Now = time_get();
+	int64 Now = time_get_tws();
 	int64 Freq = time_freq();
 
 	if(!g_Config.m_SvRegister)

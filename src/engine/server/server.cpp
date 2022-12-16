@@ -106,7 +106,7 @@ void CSnapIDPool::RemoveFirstTimeout()
 
 int CSnapIDPool::NewID()
 {
-	int64 Now = time_get();
+	int64 Now = time_get_tws();
 
 	// process timed ids
 	while(m_FirstTimed != -1 && m_aIDs[m_FirstTimed].m_Timeout < Now)
@@ -138,7 +138,7 @@ void CSnapIDPool::FreeID(int ID)
 
 	m_InUsage--;
 	m_aIDs[ID].m_State = 2;
-	m_aIDs[ID].m_Timeout = time_get()+time_freq()*5;
+	m_aIDs[ID].m_Timeout = time_get_tws()+time_freq()*5;
 	m_aIDs[ID].m_Next = -1;
 
 	if(m_LastTimed != -1)
@@ -632,7 +632,7 @@ void CServer::DoSnapshot()
 			m_aClients[i].m_Snapshots.PurgeUntil(m_CurrentGameTick-SERVER_TICK_SPEED*3);
 
 			// save it the snapshot
-			m_aClients[i].m_Snapshots.Add(m_CurrentGameTick, time_get(), SnapshotSize, pData, 0);
+			m_aClients[i].m_Snapshots.Add(m_CurrentGameTick, time_get_tws(), SnapshotSize, pData, 0);
 
 			// find snapshot that we can preform delta against
 			EmptySnap.Clear();
@@ -961,13 +961,13 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 				m_aClients[ClientID].m_SnapRate = CClient::SNAPRATE_FULL;
 
 			if(m_aClients[ClientID].m_Snapshots.Get(m_aClients[ClientID].m_LastAckedSnapshot, &TagTime, 0, 0) >= 0)
-				m_aClients[ClientID].m_Latency = (int)(((time_get()-TagTime)*1000)/time_freq());
+				m_aClients[ClientID].m_Latency = (int)(((time_get_tws()-TagTime)*1000)/time_freq());
 
 			// add message to report the input timing
 			// skip packets that are old
 			if(IntendedTick > m_aClients[ClientID].m_LastInputTick)
 			{
-				int TimeLeft = ((TickStartTime(IntendedTick)-time_get())*1000) / time_freq();
+				int TimeLeft = ((TickStartTime(IntendedTick)-time_get_tws())*1000) / time_freq();
 
 				CMsgPacker Msg(NETMSG_INPUTTIMING);
 				Msg.AddInt(IntendedTick);
@@ -1566,11 +1566,11 @@ int CServer::Run()
 
 	// start game
 	{
-		int64 ReportTime = time_get();
+		int64 ReportTime = time_get_tws();
 		int ReportInterval = 3;
 
 		m_Lastheartbeat = 0;
-		m_GameStartTime = time_get();
+		m_GameStartTime = time_get_tws();
 
 		if(g_Config.m_Debug)
 		{
@@ -1580,7 +1580,7 @@ int CServer::Run()
 
 		while(m_RunServer)
 		{
-			int64 t = time_get();
+			int64 t = time_get_tws();
 			int NewTicks = 0;
 
 			// load new map TODO: don't poll this
@@ -1604,7 +1604,7 @@ int CServer::Run()
 						m_aClients[c].m_State = CClient::STATE_CONNECTING;
 					}
 
-					m_GameStartTime = time_get();
+					m_GameStartTime = time_get_tws();
 					m_CurrentGameTick = 0;
 					Kernel()->ReregisterInterface(GameServer());
 					GameServer()->OnInit();
@@ -1656,7 +1656,7 @@ int CServer::Run()
 
 			PumpNetwork();
 
-			if(ReportTime < time_get())
+			if(ReportTime < time_get_tws())
 			{
 				if(g_Config.m_Debug)
 				{

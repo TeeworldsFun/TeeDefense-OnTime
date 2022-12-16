@@ -526,7 +526,7 @@ void lock_unlock(LOCK lock)
 
 
 /* -----  time ----- */
-int64 time_get()
+int64 time_get_tws()
 {
 #if defined(CONF_FAMILY_UNIX)
 	struct timeval val;
