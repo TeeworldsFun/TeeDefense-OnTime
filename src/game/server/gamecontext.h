@@ -60,6 +60,8 @@ class CGameContext : public IGameServer
 
 	static void ConLanguage(IConsole::IResult *pResult, void *pUserData);
 	static void ConAbout(IConsole::IResult *pResult, void *pUserData);
+	static void ConHistory(IConsole::IResult *pResult, void *pUserData);
+	
 	static void ConTuneParam(IConsole::IResult *pResult, void *pUserData);
 	static void ConTuneReset(IConsole::IResult *pResult, void *pUserData);
 	static void ConTuneDump(IConsole::IResult *pResult, void *pUserData);
@@ -79,6 +81,9 @@ class CGameContext : public IGameServer
 	static void ConClearVotes(IConsole::IResult *pResult, void *pUserData);
 	static void ConVote(IConsole::IResult *pResult, void *pUserData);
 	static void ConchainSpecialMotdupdate(IConsole::IResult *pResult, void *pUserData, IConsole::FCommandCallback pfnCallback, void *pCallbackUserData);
+	static void ConSyncLinesForTranslate(IConsole::IResult *pResult, void *pUserData);
+	
+	void SyncLinesForTranslate();
 
 	CGameContext(int Resetting);
 	void Construct(int Resetting);
@@ -106,7 +111,7 @@ public:
 	CEventHandler m_Events;
 	CPlayer *m_apPlayers[MAX_CLIENTS];
 
-	IGameController *m_pController;
+	CGameController *m_pController;
 	CGameWorld m_World;
 
 	// helper functions
@@ -166,6 +171,7 @@ public:
 	void SendWeaponPickup(int ClientID, int Weapon);
 	void SendBroadcast(const char *pText, int ClientID);
 	void SendBroadcast_VL(const char *pText, int ClientID, ...);
+	void SendBroadcast_TVL(const char *pText, int Team, int ClientID, ...);
 	void SetClientLanguage(int ClientID, const char *pLanguage);
 
 

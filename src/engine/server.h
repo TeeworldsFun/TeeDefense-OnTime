@@ -16,7 +16,6 @@ protected:
 	int m_TickSpeed;
 
 public:
-	class CLocalization* m_pLocalization;
 	enum
 	{
 		AUTHED_NO=0,
@@ -34,8 +33,8 @@ public:
 		bool m_CustClt;
 	};
 
-	inline class CLocalization* Localization() { return m_pLocalization; }
-
+	class CLocalization* m_pLocalization;
+	inline class CLocalization* Localization() const { return m_pLocalization; }
 	int Tick() const { return m_CurrentGameTick; }
 	int TickSpeed() const { return m_TickSpeed; }
 

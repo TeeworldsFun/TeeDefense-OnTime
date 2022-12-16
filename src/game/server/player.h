@@ -116,8 +116,8 @@ private:
 	int m_Team;
 
 	char m_aLanguage[16];
-
-	private:
+	bool m_Translater;
+private:
 	CTuningParams m_PrevTuningParams;
 	CTuningParams m_NextTuningParams;
 

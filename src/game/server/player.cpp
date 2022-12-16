@@ -21,6 +21,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_SpectatorID = SPEC_FREEVIEW;
 	m_LastActionTick = Server()->Tick();
 	m_TeamChangeTick = Server()->Tick();
+	m_Translater = false;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -222,12 +223,12 @@ void CPlayer::OnDisconnect(const char *pReason)
 		if(pReason && *pReason)
 		{
 			str_format(aBuf, sizeof(aBuf), "'%s' has left the game (%s)", Server()->ClientName(m_ClientID), pReason);
-			GameServer()->SendChatTarget(-1, _("'{str:PlayerName}' has left the game ({str:Reason})"), "PlayerName", Server()->ClientName(m_ClientID), "Reason", pReason);
+			GameServer()->SendChatTarget(-1, "'{STR}' has left the game ({STR})", Server()->ClientName(m_ClientID), pReason);
 		}
 		else
 		{
 			str_format(aBuf, sizeof(aBuf), "'%s' has left the game", Server()->ClientName(m_ClientID));
-			GameServer()->SendChatTarget(-1, _("'{str:PlayerName}' has left the game"), "PlayerName", Server()->ClientName(m_ClientID));
+			GameServer()->SendChatTarget(-1, "'{STR}' has left the game", Server()->ClientName(m_ClientID));
 		}
 
 		str_format(aBuf, sizeof(aBuf), "leave player='%d:%s'", m_ClientID, Server()->ClientName(m_ClientID));
@@ -315,16 +316,16 @@ void CPlayer::SetTeam(int Team, bool DoChatMsg)
 	{
 		if(Team == TEAM_SPECTATORS)
 		{
-			GameServer()->SendChatTarget(-1, _("'{str:Player}' joined the spectators"),"Player", Server()->ClientName(m_ClientID));
+			GameServer()->SendChatTarget(-1, "'{STR}' joined the spectators", Server()->ClientName(m_ClientID));
 		}else if(Team == TEAM_RED && GameServer()->m_pController->IsTeamplay())
 		{
-			GameServer()->SendChatTarget(-1, _("'{str:Player}' joined the redteam"),"Player", Server()->ClientName(m_ClientID));
+			GameServer()->SendChatTarget(-1, "'{STR}' joined the redteam", Server()->ClientName(m_ClientID));
 		}else if(Team == TEAM_BLUE && GameServer()->m_pController->IsTeamplay())
 		{
-			GameServer()->SendChatTarget(-1, _("'{str:Player}' joined the blueteam"),"Player", Server()->ClientName(m_ClientID));
+			GameServer()->SendChatTarget(-1, "'{STR}' joined the blueteam", Server()->ClientName(m_ClientID));
 		}else
 		{
-			GameServer()->SendChatTarget(-1, _("'{str:Player}' joined the game"),"Player", Server()->ClientName(m_ClientID));
+			GameServer()->SendChatTarget(-1, "'{STR}' joined the game", Server()->ClientName(m_ClientID));
 		}
 	}
 

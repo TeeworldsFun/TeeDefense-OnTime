@@ -864,3 +864,8 @@ void CCharacter::Snap(int SnappingClient)
 
 	pCharacter->m_PlayerFlags = GetPlayer()->m_PlayerFlags;
 }
+
+int CCharacter::GetCID()
+{
+	return GetPlayer()->GetCID();
+}

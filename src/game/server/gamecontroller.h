@@ -4,6 +4,7 @@
 #define GAME_SERVER_GAMECONTROLLER_H
 
 #include <base/vmath.h>
+#include <vector>
 
 #ifdef _MSC_VER
 typedef __int32 int32_t;
@@ -19,16 +20,16 @@ typedef unsigned __int64 uint64_t;
 		Controls the main game logic. Keeping track of team and player score,
 		winning conditions and specific game logic.
 */
-class IGameController
+class CGameController
 {
 	vec2 m_aaSpawnPoints[3][64];
 	int m_aNumSpawnPoints[3];
 
 	class CGameContext *m_pGameServer;
 	class IServer *m_pServer;
-
-protected:
 	CGameContext *GameServer() const { return m_pGameServer; }
+protected:
+//	CGameContext *GameServer() const { return m_pGameServer; }
 	IServer *Server() const { return m_pServer; }
 
 	struct CSpawnEval
@@ -76,8 +77,8 @@ public:
 	bool IsTeamplay() const;
 	bool IsGameOver() const { return m_GameOverTick != -1; }
 
-	IGameController(class CGameContext *pGameServer);
-	virtual ~IGameController();
+	CGameController(class CGameContext *pGameServer);
+	virtual ~CGameController();
 
 	virtual void DoWincheck();
 

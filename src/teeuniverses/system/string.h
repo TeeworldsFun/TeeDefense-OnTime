@@ -17,9 +17,7 @@
 #define __SHARED_SYSTEM_STRING__
 
 #include <cstdlib>
-/* BEGIN EDIT *********************************************************/
 #include <base/math.h>
-/* END EDIT ***********************************************************/
 #include <base/system.h>
 
 //String contained in a fixed length array
@@ -79,7 +77,7 @@ private:
 
 public:
 	_dynamic_string_core() :
-		m_pBuffer(NULL),
+		m_pBuffer(nullptr),
 		m_MaxSize(0)
 	{
 		resize_buffer(INITIALSIZE);
@@ -135,8 +133,8 @@ public:
 	
 	inline int append_at(int Pos, const char* pBuffer)
 	{
-		int BufferSize = str_length(pBuffer);
-		int Size = Pos+BufferSize+1;
+		const int BufferSize = str_length(pBuffer);
+		const int Size = Pos+BufferSize+1;
 		if(Size > m_MaxSize)
 		{
 			int NewSize = m_MaxSize*2;
@@ -148,12 +146,12 @@ public:
 		
 		str_append(m_pBuffer+Pos, pBuffer, m_MaxSize-Pos);
 		
-		return minimum(Pos + BufferSize, m_MaxSize-1);
+		return min(Pos + BufferSize, m_MaxSize-1);
 	}
 	
 	inline int append_at_num(int Pos, const char* pBuffer, int Num)
 	{
-		int Size = Pos+Num+1;
+		const int Size = Pos+Num+1;
 		if(Size > m_MaxSize)
 		{
 			int NewSize = m_MaxSize*2;
@@ -165,7 +163,7 @@ public:
 		
 		str_append_num(m_pBuffer+Pos, pBuffer, m_MaxSize-Pos, Num);
 		
-		return minimum(Pos + Num, m_MaxSize-1);
+		return min(Pos + Num, m_MaxSize-1);
 	}
 };
 
@@ -276,7 +274,5 @@ typedef string<_fixed_string_core<128> > fixed_string128;
 typedef string<_fixed_string_core<256> > fixed_string256;
 
 typedef string<_dynamic_string_core<128> > dynamic_string;
-
-//Operations on strings
 
 #endif
