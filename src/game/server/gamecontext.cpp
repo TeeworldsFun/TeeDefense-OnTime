@@ -14,7 +14,7 @@
 #include <teeuniverses/system/string.h>
 #include <teeuniverses/tl/nlohmann_json.h>
 
-#include <game/server/TeeDefense/Item/item.h>
+#include <game/server/TeeDefense/Item/ItemCore.h>
 
 #include <mutex>
 #include <thread>

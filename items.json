@@ -1,12 +1,16 @@
 {"Items":
     [
         {
-            "Type": 12,
-            "Name": "ASDJ",
-            "Mine": [{"Test": "asdawsd"}]
+            "Type": 1,
+            "Name": "EDreemur's First Time",
+            "Method": [{"2": 1}, 
+                       {"4": 1}, 
+                       {"3": 3}]
         },
         {
-            "Type": 1223
+            "Type": 2,
+            "Name": "Shengyan's Life",
+            "Craft": ["FFS", "InfClassR", "Admin", "QQ Group", "QQ Group"]
         }
     ]
 }

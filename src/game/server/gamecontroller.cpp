@@ -9,13 +9,13 @@
 #include "gamecontroller.h"
 #include "gamecontext.h"
 
-#include "TeeDefense/Tower/tower.h"
+#include "TeeDefense/Entities/Tower/tower.h"
 
 CGameController::CGameController(class CGameContext *pGameServer)
 {
 	m_pGameServer = pGameServer;
 	m_pServer = m_pGameServer->Server();
-	m_pGameType = "TeeDefense City";
+	m_pGameType = "TeeDefense OnTidme";
 
 	//
 	DoWarmup(g_Config.m_SvWarmup);

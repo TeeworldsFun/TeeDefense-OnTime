@@ -28,6 +28,11 @@ inline int round_to_int(float f)
 	return (int)(f-0.5f);
 }
 
+inline int string_to_int(const char *s)
+{
+	return atoi(s);
+}
+
 template<typename T, typename TB>
 inline T mix(const T a, const T b, TB amount)
 {

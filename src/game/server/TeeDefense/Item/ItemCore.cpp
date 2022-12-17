@@ -1,18 +1,11 @@
 /* 2022 - 2022 (C) Copyright ST-Chara */
 
-#include "item.h"
+#include "ItemCore.h"
 
 #include <fstream>
 #include <string>
 #include <sstream>
 
-// Init Item
-CItem::CItem()
-{
-    // Init all options.(what?)
-    str_copy(m_Name, "", sizeof(m_Name));
-    m_Type = -1;
-}
 CItemSys::CItemSys(CGameContext *pGameServer)
 {
     m_pGameServer = pGameServer;
@@ -27,7 +20,7 @@ void CItemSys::LoadJson(const std::string& FileName)
     std::ifstream i(FileName);
     if(i.is_open())
     {
-        i >> m_Json;
+        m_Json.parse(i);
         i.close();
     }
     else
@@ -43,7 +36,6 @@ void CItemSys::LoadItems()
 	using nlohmann::json;
     json j = m_Json["Items"];
 
-
     if(j.is_array())
 	{
         dbg_msg("Test", "Type = %s, size = %d", j.type_name(), j.size());
@@ -56,19 +48,19 @@ void CItemSys::LoadItems()
             //str_copy(TmpItem->m_Name, Json.value("Name", "SB").c_str(), sizeof(TmpItem->m_Name));
             TmpItem.m_Type = Json.value("Type", 0);
             
-            if(!Json["Mine"].empty())
-            {
-                json From = Json["Mine"];
-                for(int j = 0; j < From.size(); j++)
-                {
-                    json TempJson = From[j];
-                    dbg_msg("Test", "%d Type:: %s %s", From.size(), TempJson.type_name(), TempJson.dump().c_str());
-                    //TmpItem.m_Mine.add()
-                }
-            }
-            else if(!Json["Method"].empty())
+            if(!Json["Method"].empty())
             {
                 json From = Json["Method"];
+                for(json::iterator it = From.begin(); it; it++)
+                {
+                    json TempJson = From[j];
+                    
+                       
+                    dbg_msg("Test", "%d: %d", string_to_int(TempJson.begin().key().c_str()), string_to_int(TempJson.begin().value().dump().c_str()));
+                    // WORKING
+                }
+                // Assert for testing
+                dbg_assert(false, "Test done.");
             }
             else if(!Json["MobID"].empty())
             {
