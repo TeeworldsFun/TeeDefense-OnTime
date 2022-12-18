@@ -10,6 +10,7 @@
 
 #include "detect.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -907,6 +908,8 @@ int str_comp_nocase_num(const char *a, const char *b, const int num);
 		- The strings are treated as zero-termineted strings.
 */
 int str_comp(const char *a, const char *b);
+
+bool CompString(const char *a, const char *b);
 
 /*
 	Function: str_comp_num

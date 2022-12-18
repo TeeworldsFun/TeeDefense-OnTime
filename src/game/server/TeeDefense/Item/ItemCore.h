@@ -22,7 +22,7 @@ public:
     
     CItemSys(CGameContext *pGameServer);
 
-    std::vector<CItem *> m_Items;
+    std::vector<CItem > m_Items;
 };
 
 #endif

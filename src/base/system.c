@@ -1665,6 +1665,11 @@ int str_comp_nocase(const char *a, const char *b)
 #endif
 }
 
+bool CompString(const char *a, const char *b) 
+{ 
+	return str_comp(a, b) == 0; 
+}
+
 int str_comp_nocase_num(const char *a, const char *b, const int num)
 {
 #if defined(CONF_FAMILY_WINDOWS)

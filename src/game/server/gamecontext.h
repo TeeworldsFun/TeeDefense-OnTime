@@ -62,7 +62,9 @@ class CGameContext : public IGameServer
 	static void ConLanguage(IConsole::IResult *pResult, void *pUserData);
 	static void ConAbout(IConsole::IResult *pResult, void *pUserData);
 	static void ConHistory(IConsole::IResult *pResult, void *pUserData);
-	
+	static void ConItemCraft(IConsole::IResult *pResult, void *pUserData);
+	void Test();
+
 	static void ConTuneParam(IConsole::IResult *pResult, void *pUserData);
 	static void ConTuneReset(IConsole::IResult *pResult, void *pUserData);
 	static void ConTuneDump(IConsole::IResult *pResult, void *pUserData);
@@ -102,6 +104,7 @@ public:
 	class IConsole *Console() { return m_pConsole; }
 	CCollision *Collision() { return &m_Collision; }
 	CTuningParams *Tuning() { return &m_Tuning; }
+	CItemSys *ItemSys() { return m_ItemSys; }
 	virtual class CLayers *Layers() { return &m_Layers; }
 
 	CGameContext();

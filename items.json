@@ -3,14 +3,46 @@
         {
             "Type": 1,
             "Name": "EDreemur's First Time",
-            "Method": [{"2": 1}, 
-                       {"4": 1}, 
-                       {"3": 3}]
+            "Method": 
+            [
+                {"0": 1},
+                {"2": 1},
+                {"4": 1},
+                {"3": 3}
+            ]
         },
         {
-            "Type": 2,
-            "Name": "Shengyan's Life",
-            "Craft": ["FFS", "InfClassR", "Admin", "QQ Group", "QQ Group"]
+            "Type": 1,
+            "Name": "EDreemur's First Tssime",
+            "Method": 
+            [
+                {"0": 1},
+                {"2": 1},
+                {"4": 1},
+                {"3": 3}
+            ]
+        },
+        {
+            "Type": 1,
+            "Name": "EDreemur's First Tssasadsime",
+            "Method": 
+            [
+                {"0": 1},
+                {"2": 1},
+                {"4": 1},
+                {"3": 3}
+            ]
+        },
+        {
+            "Type": 1,
+            "Name": "EDreemur's First Tssadasdawime",
+            "Method": 
+            [
+                {"0": 1},
+                {"2": 1},
+                {"4": 1},
+                {"3": 3}
+            ]
         }
     ]
 }

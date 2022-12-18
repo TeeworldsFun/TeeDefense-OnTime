@@ -9,7 +9,6 @@
 CItemSys::CItemSys(CGameContext *pGameServer)
 {
     m_pGameServer = pGameServer;
-    dbg_msg("Test", "asdhgwkhdagsd");
     LoadJson("items.json");
 	LoadItems();
 }
@@ -20,7 +19,7 @@ void CItemSys::LoadJson(const std::string& FileName)
     std::ifstream i(FileName);
     if(i.is_open())
     {
-        m_Json.parse(i);
+        i >> m_Json;
         i.close();
     }
     else
@@ -43,24 +42,25 @@ void CItemSys::LoadItems()
 		{
             json Json = j[i];
             CItem TmpItem;
-			dbg_msg("Test", "%d: %d", i, Json.value("Type", 0));
+			dbg_msg("WTFTest", "%d: %d", i, Json.value("Type", 0));
             
-            //str_copy(TmpItem->m_Name, Json.value("Name", "SB").c_str(), sizeof(TmpItem->m_Name));
+            str_copy(TmpItem.m_Name, Json.value("Name", "SB").c_str(), sizeof(TmpItem.m_Name));
             TmpItem.m_Type = Json.value("Type", 0);
             
             if(!Json["Method"].empty())
             {
                 json From = Json["Method"];
-                for(json::iterator it = From.begin(); it; it++)
+                for(int j = 0; j < From.size(); j++)
                 {
                     json TempJson = From[j];
+                    CItem::Source TempMethod;
                     
-                       
-                    dbg_msg("Test", "%d: %d", string_to_int(TempJson.begin().key().c_str()), string_to_int(TempJson.begin().value().dump().c_str()));
+                    TempMethod.m_ID = string_to_int(TempJson.begin().key().c_str());
+                    TempMethod.m_Num = string_to_int(TempJson.begin().value().dump().c_str());
+                    
+                    TmpItem.m_SourceMethod.push_back(TempMethod);
                     // WORKING
                 }
-                // Assert for testing
-                dbg_assert(false, "Test done.");
             }
             else if(!Json["MobID"].empty())
             {
@@ -95,7 +95,7 @@ void CItemSys::LoadItems()
                 
                 break;
             }
-            m_Items.push_back(&TmpItem);
+            m_Items.push_back(TmpItem);
         }
     }
 }

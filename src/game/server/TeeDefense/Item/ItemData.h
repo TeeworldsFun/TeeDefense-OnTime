@@ -13,13 +13,6 @@ enum
     TYPE_USE,
 
     END_TYPE,
-    START_SOURCE=0,
-
-    SOURCE_MINE,
-    SOURCE_CRAFT,
-    SOURCE_MOB,
-    
-    END_SOURCE,
 };
 
 // Item Base
@@ -31,11 +24,17 @@ public:
     char m_Name[64];
     int m_Type;
 
+    struct Source
+    {
+        int m_ID;
+        int m_Num;
+    };
+    
     // Craft
-    std::map<int, int> m_Method;
+    std::vector<Source > m_SourceMethod;
     
     // Mob
-    std::map<int, int> m_MobID;
+    std::vector<Source > m_SourceMob;
 
 // Material
 public:

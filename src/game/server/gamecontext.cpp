@@ -45,8 +45,6 @@ void CGameContext::Construct(int Resetting)
 		m_pVoteOptionHeap = new CHeap();
 
 	m_ItemSys = new CItemSys(this);
-	if(m_ItemSys)
-		dbg_msg("Test", "sadajhw");
 }
 
 CGameContext::CGameContext(int Resetting)
@@ -1763,6 +1761,72 @@ void CGameContext::ConsoleOutputCallback_Chat(const char *pLine, void *pUser)
 	ReentryGuard--;
 }
 
+void CGameContext::Test()
+{
+	dynamic_string buffer;
+	for(int i = 0; i < ItemSys()->m_Items.size(); i++)
+	{
+		dynamic_string Buf;
+		dynamic_string TempItem;
+		char IName[64];
+		str_copy(IName, ItemSys()->m_Items[i].m_Name, sizeof(IName));
+		Server()->Localization()->Format_L(TempItem, "en", IName);
+		Server()->Localization()->Format_L(Buf, "en", TempItem.buffer());
+		if(i != ItemSys()->m_Items.size()-1)
+		{
+			Buf.append(", ");
+		}
+		buffer.append(Buf);
+		if(i%3 == 0)
+		{
+			dbg_msg("GOTCHA", buffer.buffer());
+			buffer.clear();
+		}
+	}
+}
+
+void CGameContext::ConItemCraft(IConsole::IResult *pResult, void *pUserData)
+{
+	CGameContext *pSelf = (CGameContext *)pUserData;
+	int CID = pResult->GetClientID();
+	CPlayer *Player = pSelf->m_apPlayers[CID];
+	if(pResult->NumArguments()>0)
+	{
+		if(CompString(pResult->GetString(0), "list"))
+		{
+			pSelf->SendChatTarget(CID, "========= Craft-Item List =========");
+			
+			pSelf->SendChatTarget(CID, "");
+			dynamic_string buffer;
+			for(int i = 0; i < pSelf->ItemSys()->m_Items.size(); i++)
+			{
+				dynamic_string Buf;
+				dynamic_string TempItem;
+				char IName[64];
+				str_copy(IName, pSelf->ItemSys()->m_Items[i].m_Name, sizeof(IName));
+				pSelf->Server()->Localization()->Format_L(TempItem, Player->GetLanguage(), IName);
+				pSelf->Server()->Localization()->Format_L(Buf, Player->GetLanguage(), TempItem.buffer());
+				if(i != pSelf->ItemSys()->m_Items.size()-1)
+				{
+					Buf.append(", ");
+				}
+				buffer.append(Buf);
+				if(i%3 == 0)
+				{
+					pSelf->SendChatTarget(pResult->GetClientID(), buffer.buffer());
+					buffer.clear();
+				}
+			}
+		}
+	}
+	else
+	{
+		pSelf->SendChatTarget(CID, "========= Craft-Item Help =========");
+		pSelf->SendChatTarget(CID, "= /item list - List existing items.");
+		pSelf->SendChatTarget(CID, "= /item make - Making items.");
+	}
+}
+
 void CGameContext::OnConsoleInit()
 {
 	m_pServer = Kernel()->RequestInterface<IServer>();
@@ -1939,6 +2003,7 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 		}
 	}
 #endif
+	Test();
 }
 
 void CGameContext::OnShutdown()
